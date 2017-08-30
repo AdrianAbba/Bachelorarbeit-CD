@@ -1,0 +1,97 @@
+<template name="landingPage">
+
+  <ol class="breadcrumb">
+    <li class="active">Startseite</li>
+  </ol>
+
+  <div id="container">
+  	<ul class="tags">
+      <form class="navbar-form navbar-right">
+        <div class="form-group searchBoxFixed" style="display:inline">
+          <div class="input-group">
+            <input type="text" id="input-search-term" class="form-control" placeholder="Search">
+          </div>
+        </div>
+        <button type="submit" id="btn-search" class="btn btn-primary">Suchen</button>
+        <button class="btn btn-primary btn-remove-search-terms" type="button" title="Delete tags">
+          Filter Löschen <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+        </button>
+      </form>
+      <div class="tagsRange">
+        {{#each tags }}
+          {{#if $eq this ""}}
+          {{else}}
+            <li class="addedTag">{{this}}<span class="tagRemove btn-remove-search-term">x</span></li>
+          {{/if}}
+        {{/each}}
+      </div>
+  	</ul>
+  </div>
+
+  {{#EasySearch.IfInputEmpty index=projectsIndex}}
+    {{#each cardsArea in cardsAreas}}
+      {{> UI.dynamic template=cardsArea data=@index}}
+    {{/each}}
+    {{#if endOfDocuments}}
+      <div class="col-md-12">
+        <div class="col-xs-12 col-md-2 col-md-offset-5">
+           <a href="#" class="load-more btn btn-primary" id="viewMore">Mehr Anzeigen</a>
+        </div>
+      </div>
+    {{/if}}
+  {{else}}
+    {{#EasySearch.IfNoResults index=projectsIndex}}
+      <h3>Leider keine Projekte gefunden :( </h3>
+    {{/EasySearch.IfNoResults}}
+
+    {{#EasySearch.IfSearching index=projectsIndex}}
+      Suchen.....
+    {{/EasySearch.IfSearching}}
+
+    {{#EasySearch.Each index=projectsIndex }}
+      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 containerFlip">
+        {{>projectCard projectId=(originalId this) showLoading=true}}
+      </div>
+    {{/EasySearch.Each}}
+
+  {{/EasySearch.IfInputEmpty}}
+
+  <!--<select class="sorting">
+    <option value="relevance">Relevance</option>
+    <option value="newest">Newest</option>
+    <option value="bestScore">Score</option>
+  </select>
+
+  <td>
+    <select id="sortStatus">
+        <option value="new">New -> Old</option>
+        <option value="old">old -> New</option>
+        <option value="deadlineNear">Deadline nah</option>
+        <option value="deadlineFar">Deadline fern</option>
+        <option value="relevanz">Relevanz</option>
+    </select>
+  </td>
+  <div class="project-cards">
+    <div class="container">
+      <div class="row">
+        {{#each project in projects}}
+          <div class="col-lg-3">
+            {{#if project.coverImg}}
+              {{>projectCard currentDoc=project}}
+            {{else}}
+              {{>projectCardCoverless currentDoc=project}}
+            {{/if}}
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  </div> -->
+</template>
+
+<template name="cardArea">
+  {{#each documents}}
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 containerFlip">
+      {{>projectCard projectId=this._id showLoading=true}}
+    </div>
+  {{/each}}
+</template>

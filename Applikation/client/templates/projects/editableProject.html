@@ -1,0 +1,229 @@
+<template name="editableProject">
+  {{#onlyIfLoggedIn}}
+    {{#if authInProgress}}
+      <p>Bitte warten...</p>
+    {{else}}
+      {{#if canShow}}
+        {{#with project}}
+        <!--***************Beginn Coursefeature****************-->
+          {{#if $eq previousRoute "course"}}
+            <ol class="breadcrumb">
+              <li><a href="{{pathFor 'landingPage'}}">Startseite</a></li>
+              <li><a href="{{pathFor 'courses'}}">Meine Kurse</a></li>
+              <li><a href="{{pathFor 'course' courseId=getCourseId courseName=(encodeUrlString courseProjekt)}}">{{courseProjekt}}</a></li>
+              <li class="active">{{this.title}}</li>
+            </ol>
+          {{else}}
+          <!--***************End Coursefeature****************-->
+            {{#if $eq previousRoute "userProfile"}}
+              <ol class="breadcrumb">
+                <li><a href="{{pathFor 'landingPage'}}">Startseite</a></li>
+                <li><a href="{{pathFor 'userProfile' userId=currentUser._id uniqueName=(getEmailName currentUser._id) }}"> Profil</a></li>
+                <li class="active">{{this.title}}</li>
+              </ol>
+            {{else}}
+              {{#if this.isNewProject}}
+                <ol class="breadcrumb">
+                  <li><a href="{{pathFor 'landingPage'}}">Startseite</a></li>
+                  <li class="active">Neues Projekt</li>
+                </ol>
+              {{else}}
+                <ol class="breadcrumb">
+                  <li><a href="{{pathFor 'landingPage'}}">Startseite</a></li>
+                  <li class="active">{{this.title}}</li>
+                </ol>
+              {{/if}}
+            {{/if}}
+          {{/if}}
+          <div class="row">
+            <div class="col-lg-12">
+              <h1 class="page-header">
+                {{> editTitle currentDoc=this currentCollection=getCollection }}
+              </h1>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-lg-8">
+              <div class="panel panel-default">
+                {{> wholeGallery currentDoc=this currentCollection=getCollection }}
+                <div class="panel-body">
+                <div class="row">
+                  <div class="col-sm-12">
+                    {{> editDescription currentDoc=this currentCollection=getCollection }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    {{> editTags currentDoc=this currentCollection=getCollection }}
+                  </div>
+                </div>
+                <br>
+                {{#if hasPermissions 'deleteProject' this }}
+                  {{#if this.isNewProject}}
+                    <button id="btn-delete-draft" class="btn btn-default">Verwerfen</button>
+                    <button id="btn-publish-draft" class="btn btn-primary">Projekt erstellen</button>
+                  {{else}}
+                    <button id="btn-show-delete-project" class="btn btn-danger">Projekt löschen</button>
+                  {{/if}}
+                {{/if}}
+                </div>
+              </div> 
+              <!--***************Beginn Coursefeature****************-->
+              {{> notesBoxSupervisors currentDoc=this currentCollection=getCollection}}
+              <!--***************End Coursefeature****************-->
+            </div>
+
+            <div class="col-lg-4">
+              <!--***************Beginn Coursefeature****************-->
+              {{#if $and enterProject ($and memberCheck supervisorCheck)}}
+                <button class="btn btn-primary" id="btn-enter-project">Kursprojekt beitreten</button>
+              {{/if}}
+              <!--***************End Coursefeature****************-->
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <span class="panel-title">Team</span>
+                    </div>
+                    <div class="panel-body">
+                      <ul class="media-list">
+                        {{#each teamMember in team}}
+                          {{> member currentDoc=this userId=teamMember.userId role=teamMember.role isEditor=teamMember.isEditor slot=@index currentCollection=getCollection }}
+                        {{/each}}
+                        {{> addMember currentDoc=this currentCollection=getCollection }}
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <span class="panel-title">Betreuer</span>
+                    </div>
+                    <div class="panel-body">
+                      <ul class="media-list">
+                        {{#each member in supervisors}}
+                          {{> supervisor currentDoc=this userId=member.userId role=member.role slot=@index currentCollection=getCollection }}
+                        {{/each}}
+                        {{> addSupervisor currentDoc=this currentCollection=getCollection }}
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h2 class="panel-title">Gesuchte Fähigkeiten</h2>
+                    </div>
+                    <div class="panel-body">
+                      <ul>
+                        {{#each job in jobs}}
+                          {{>jobItem jobLabel=job.joblabel currentDoc=this currentCollection=getCollection slot=@index}}
+                        {{/each}}
+                      </ul>
+                      {{>addJob currentDoc=this currentCollection=getCollection}}
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h2 class="panel-title">Kontakt</h2>
+                    </div>
+                    <div class="panel-body">
+                      <ul class="list-unstyled">
+                        {{#each contact in contacts}}
+                          {{>contactItem medium=contact.medium approach=contact.approach currentDoc=this currentCollection=getCollection slot=@index}}
+                        {{/each}}
+                        {{> addContact currentDoc=this currentCollection=getCollection }}
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h2 class="panel-title">Details</h2>
+                    </div>
+                    <div class="panel-body">
+                      <dl class="dl">
+                        <!--***************Beginn Coursefeature****************-->
+                        <dt>Kurs</dt>
+                        <dd>{{> addCourse currentDoc=this courseList=suggestedCourses currentCollection=getCollection }}</dd>
+                        <!--***************End Coursefeature****************-->
+                        <dt>Projektanlass</dt>
+                        <dd>{{>editOccasions currentDoc=this currentCollection=getCollection}}</dd>
+                        <dt>Projektbeginn</dt>
+                        <dd>{{>editBeginning currentDoc=this currentCollection=getCollection}}</dd>
+                        <dt>Deadline</dt>
+                        <dd>{{>editDeadline currentDoc=this currentCollection=getCollection}}</dd>
+
+                      </dl>
+                    </div>
+                  </div>
+                  <!--***************Beginn Coursefeature****************-->
+                  {{#if $or (isUserInGroup team currentUser._id) (isUserInGroup supervisors currentUser._id)}}
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h2 class="panel-title">PDF-Abgabe</h2>
+                      </div>
+                      <div class="panel-body">
+                        <dl class="dl">
+                          {{> projectFileUpload currentDoc=this currentCollection=getCollection}}
+                        </dl>
+                      </div>
+                    </div>
+                  {{/if}}
+                <!--***************End Coursefeature****************-->
+                </div>
+              </div>
+        {{/with}}
+        {{else}}
+          <h2>Dieses Projekt ist privat oder nicht vorhanden.</h2>
+          <p>Melde dich mit dem passenden HAW-Account an oder erstelle ein eigenes Projekt.</p>
+      {{/if}}
+    {{/if}}
+  {{/onlyIfLoggedIn}}
+</template>
+
+<template name="deleteProjectModal">
+  <div id="deleteProjectModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Projekt löschen</h4>
+        </div>
+        <div class="modal-body">
+          <p>Möchtest du das Projekt <strong>{{docTitle}}</strong> wirklich löschen?</p>
+          <div class="alert alert-warning" role="alert">
+            Wenn du dieses Projekt löscht, werden die Inhalte dieser Seite sowie die Projektkarte für dich und alle anderen Teammitglieder für immer verloren sein!
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button id="btn-delete" type="button" class="btn btn-danger">Projekt entgültig löschen</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal Delete Project -->
+</template>
+
+<!--***************Beginn Coursefeature****************-->
+<template name="enterProjectModal">
+  <div id="enterProjectModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Projekt beitreten</h4>
+        </div>
+        <div class="modal-body">
+          <p>Möchtest du dem Kursprojekt <strong>{{docTitle}}</strong> beitreten?</p>
+          <div class="alert alert-warning" role="alert">
+            Wenn du diesem Krusprojekt beitreten möchtest, benötigst du den zugehörigen Einschreibeschlüssel!
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Einschreibeschlüssel:</span>
+            <input type="text" class="form-control" id="modalInputKey" placeholder="Enter here" aria-describedby="basic-addon1">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button id="btn-enter" type="button" class="btn btn-primary">Projekt beitreten</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal Delete Project -->
+</template>
+<!--***************End Coursefeature****************-->

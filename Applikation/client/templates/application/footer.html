@@ -1,0 +1,144 @@
+<template name="footer">
+  <footer class="footer">
+    <div class="container text-center">
+      <span><strong>Feedback und Support:</strong>
+        <a data-name="projektor" data-domain="mt.haw-hamburg" data-tld="de" href="#" class="cryptedmail" onclick="window.location.href = 'mailto:' + this.dataset.name + '@' + this.dataset.domain + '.' + this.dataset.tld;return false"></a>
+      </span>
+    </div>
+  </footer>
+<script>
+// $('body').bind('scroll mousewheel', function(event) {
+//
+//   if (event.originalEvent.wheelDelta >= 0) {
+//       $('.footer').fadeIn();
+//   }  else {
+//       $('.footer').fadeOut();
+//   }
+// });
+
+// creates a global "addWheelListener" method
+// example: addWheelListener( elem, function( e ) { console.log( e.deltaY ); e.preventDefault(); } );
+(function(window,document) {
+
+    var prefix = "", _addEventListener, support;
+
+    // detect event model
+    if ( window.addEventListener ) {
+        _addEventListener = "addEventListener";
+    } else {
+        _addEventListener = "attachEvent";
+        prefix = "on";
+    }
+
+    // detect available wheel event
+    support = "onwheel" in document.createElement("div") ? "wheel" : // Modern browsers support "wheel"
+              document.onmousewheel !== undefined ? "mousewheel" : // Webkit and IE support at least "mousewheel"
+              "DOMMouseScroll"; // let's assume that remaining browsers are older Firefox
+
+    window.addWheelListener = function( elem, callback, useCapture ) {
+        _addWheelListener( elem, support, callback, useCapture );
+
+        // handle MozMousePixelScroll in older Firefox
+        if( support == "DOMMouseScroll" ) {
+            _addWheelListener( elem, "MozMousePixelScroll", callback, useCapture );
+        }
+    };
+
+    function _addWheelListener( elem, eventName, callback, useCapture ) {
+        elem[ _addEventListener ]( prefix + eventName, support == "wheel" ? callback : function( originalEvent ) {
+            !originalEvent && ( originalEvent = window.event );
+
+            // create a normalized event object
+            var event = {
+                // keep a ref to the original event object
+                originalEvent: originalEvent,
+                target: originalEvent.target || originalEvent.srcElement,
+                type: "wheel",
+                deltaMode: originalEvent.type == "MozMousePixelScroll" ? 0 : 1,
+                deltaX: 0,
+                deltaY: 0,
+                deltaZ: 0,
+                preventDefault: function() {
+                    originalEvent.preventDefault ?
+                        originalEvent.preventDefault() :
+                        originalEvent.returnValue = false;
+                }
+            };
+
+            // calculate deltaY (and deltaX) according to the event
+            if ( support == "mousewheel" ) {
+                event.deltaY = - 1/40 * originalEvent.wheelDelta;
+                // Webkit also support wheelDeltaX
+                originalEvent.wheelDeltaX && ( event.deltaX = - 1/40 * originalEvent.wheelDeltaX );
+            } else {
+                event.deltaY = originalEvent.deltaY || originalEvent.detail;
+            }
+
+            // it's time to fire the callback
+            return callback( event );
+
+        }, useCapture || false );
+    }
+
+})(window,document);
+
+var lastPos = 0;
+var lastDelta = 0;
+var clean = 0;
+addWheelListener( window, function( event ) {
+  if (lastDelta == event.wheelDelta) {
+    clean++;
+  }
+  if (clean == 10) {
+    if (event.deltaY < 0) {
+        $('.footer').fadeIn();
+
+    } else {
+      if (event.deltaY > 0) {
+        $('.footer').fadeOut();
+        if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight+60) && (lastPos == (window.innerHeight + window.scrollY))) {
+            $('#viewMore').click();
+          clean = -20;
+          return;
+        }
+      }
+    }
+    clean = 0;
+  }
+  lastPos = window.innerHeight + window.scrollY;
+  lastDelta = event.wheelDelta;
+});
+
+
+
+/*
+  var lastScrollTop = 0;
+  var lastScrollUp = 0;
+  var lastScrollDown = 0;
+  $(window).scroll(function() {
+    var st = $(this).scrollTop();
+
+    if (st > lastScrollTop){
+      if (lastScrollDown > 80) {
+        $('.footer').fadeOut();
+    }else    {
+        lastScrollUp = 0;
+        lastScrollDown++;
+}
+     } else {
+       if (lastScrollUp > 100 || $(window).scrollTop() < 100) {
+         $('.footer').fadeIn();
+       } else   {
+         lastScrollUp++;
+         lastScrollDown = 0;
+       }
+
+     }
+     console.log("up "+lastScrollUp);
+     console.log("down "+ lastScrollDown);
+
+     lastScrollTop = st;
+   });*/
+ </script>
+  {{> loading}}
+</template>

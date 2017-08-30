@@ -1,0 +1,62 @@
+<template name="loginPage">
+  <div class="container">
+    <div class="row">
+      <div class="jumbotron text-center">
+        <h1>Willkommen beim HAW Projektor!</h1>
+        <p>Erstelle deine eigenen Projekte und lade zum Mitmachen ein.</p>
+        <p>Mach mit bei Projekten deiner Kommilitonen und werde Teil des Teams.</p>
+        <p>Zeige, woran du gerade arbeitest und was dich interessiert.</p>
+      </div>
+        <h2 class="text-center">Einfach mit deinem HAW-Account anmelden.</h2>
+      <br>
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label for="inputUserId" class="col-sm-5 control-label">Benutzerkennung</label>
+          <div class="col-sm-3">
+            <input type="text" class="form-control" id="inputUserId" name="ldap" placeholder="HAW-Benutzerkennung"  aria-describedby="hawid-help-block">
+            <span id="hawid-help-block" class="help-block">Deine HAW-Benutzerkennung für die Online-Services der HAW, z.B. abc123.</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword" class="col-sm-5 control-label">Passwort</label>
+          <div class="col-sm-3">
+            <input type="password" class="form-control" id="inputPassword" name="password" placeholder="HAW-Passwort">
+          </div>
+        </div>
+        <!-- <div class="form-group">
+          <div class="col-sm-offset-5 col-sm-3">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox"> Angemeldet bleiben.
+              </label>
+            </div>
+          </div>
+        </div> -->
+        <div class="form-group">
+          <div class="col-sm-offset-5 col-sm-3">
+            {{#if loggingIn}}
+              <div class="alert alert-info" role="alert">
+                Anmeldung wird durchgeführt...
+              </div>
+            {{else}}
+              {{#if failedLogin}}
+                <div class="alert alert-danger" role="alert">
+                  <strong>Anmeldung fehlgeschlagen!</strong> Bitte überprüfe Benutzerkennung und Passwort.
+                </div>
+              {{/if}}
+            {{/if}}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-5 col-sm-3">
+            <button type="submit" id="login-buttons-password" class="btn btn-primary btn-block">
+              Anmelden
+            </button>
+          </div>
+        </div>
+      </form>
+
+    </div> <!-- /.row -->
+  </div> <!-- /.container -->
+</template>

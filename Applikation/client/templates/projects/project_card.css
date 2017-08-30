@@ -1,0 +1,575 @@
+.coverless-card-title {
+   height: 78px;
+}
+.panel-right{
+  position: absolute;
+  left:92.5%;
+  top:3%;
+  color: white;
+}
+.coverless-card-titleCourse {
+  height: 25px;
+}
+
+.cover-card-title {
+  height: 62px;
+}
+.fa-ellipsis-cursor{
+  cursor:pointer;
+}
+.expandable-content {
+  position: absolute;
+  top: 201px;
+  left: 16.5px;
+  background-color: white;
+  width: 260px;
+  height: 169px;
+  padding: 15px;
+  -webkit-transition: all 0.3s linear 0s;
+  -moz-transition: all 0.3s linear 0s;
+  -ms-transition: all 0.3s linear 0s;
+  -o-transition: all 0.3s linear 0s;
+  transition: all 0.3s linear 0s;
+}
+
+/*.expandable:hover {
+  display: block;
+  height: 160px;
+}*/
+
+/*.expandable:hover .expandable-content  {
+  top: 101px;
+}*/
+#tags-color{
+  background-color: #5cb85c;
+  line-height: :2.3;
+}
+
+.panel-body.cover-card-body {
+  height: 200px;
+}
+
+.front .panel-body.coverless-card-body {
+  height: 225px;
+  overflow:hidden;
+}
+
+.back .panel-body.coverless-card-body {
+  height: 390px;
+  overflow:hidden;
+}
+
+.panel-body.coverless-card-bodyCourse {
+  height: 100px;
+}
+
+.coverless-card-body .ellipsis-tags {
+  top: 0px;
+}
+
+.coverless-card-body .jobs-box {
+  height: 332px;
+}
+
+.jobs-box-body {
+  padding: 15px;
+  width: 100%;
+  overflow: hidden;
+  height: 330px;
+  /*-moz-box-shadow: inset 0 -10px 10px -10px #333;
+    -webkit-box-shadow: inset 0 -10px 10px -10px #333;
+    box-shadow: inset 0 -10px 10px -10px #333;*/
+}
+
+.panel-footer > ul {
+  margin-bottom: 0;
+}
+
+.panel-footerBack{
+  text-align: center;
+}
+
+.jobs-expanded {
+  display: block;
+}
+
+.remaining-member {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.jobs-box {
+  border: 1px solid #eee;
+  position: relative;
+  /*height: 182px;*/
+  z-index: 1;
+  margin-bottom: 10px;
+}
+
+/*.cover-card-title {
+  position: absolute;
+  z-index: 7;
+}*/
+
+.jobs-box > .expandable {
+  padding-top: 15px;
+  padding-bottom: 5px;
+  overflow: hidden;
+  height: 82px;
+  width: 100%;
+  -webkit-transition: all 0.3s linear 0s;
+  -moz-transition: all 0.3s linear 0s;
+  -ms-transition: all 0.3s linear 0s;
+  -o-transition: all 0.3s linear 0s;
+  transition: all 0.3s linear 0s;
+}
+
+.expandable-trigger:hover + .expandable-content .expandable {
+  height: 157px;
+}
+
+.expandable-trigger:hover + .expandable-content {
+  top: 126px;
+}
+
+/*.expandable-trigger:hover + .expandable-content .testTrigger {
+  position:relative;
+  z-index: 2;
+}*/
+
+.expandable-trigger:hover + .expandable-content .card {
+  position: relative;
+}
+
+.expandable-trigger:hover {
+  height: 225px;
+  z-index: 2;
+}
+
+.expandable-trigger {
+  height: 85px;
+  width: 230px;
+  bottom: 109px;
+  /*background-color: yellow;*/
+  position: absolute;
+  z-index: 2;
+}
+
+.jobs-box-header {
+  z-index: 2;
+  width: 100%;
+}
+
+.jobs-box-header > span {
+  background-color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.remaining-member > a.text-info:hover {
+  text-decoration: none;
+}
+
+.remaining-size{
+  font-size:12px;
+}
+
+.circle30-remaining-members {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  /*vertical-align: middle;*/
+}
+.circle20-remaining-members {
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  /*vertical-align: middle;*/
+}
+
+.title-1row {
+  /*max-height: 28px;*/
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+
+.title-2row {
+  /*max-height: 54px;*/
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+.jobBreak{
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+.subtitle-2row {
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+  z-index: -100;
+}
+
+.hr-top {
+  margin-bottom: 7px;
+}
+hr{
+  margin-top:40px;
+}
+
+.hr-bottom {
+  margin-top: 7px;
+  margin-bottom:10px;
+}
+
+.member-icons-box {
+  position: absolute;
+  top: -30px;
+  right: 0px;
+  padding: 5px;
+  background-color: white;
+  border-top-left-radius: 2px;
+}
+
+.member-icons {
+  margin: 0;
+}
+
+.panel-header.cover {
+  position: relative;
+  /*display: block;*/
+  height: 200px;
+  /*background-color: grey;*/
+}
+
+.cover > img {
+  height: 200px;
+}
+
+.panel-body h3 {
+  margin-top: 0;
+}
+
+/*.expandable-content > h3 {
+  margin-top: 0;
+}*/
+
+.post-module {
+  position: relative;
+  z-index: 1;
+  display: block;
+  background: #ffffff;
+  min-width: 270px;
+  height: 470px;
+  -webkit-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
+  -webkit-transition: all 0.3s linear 0s;
+  -moz-transition: all 0.3s linear 0s;
+  -ms-transition: all 0.3s linear 0s;
+  -o-transition: all 0.3s linear 0s;
+  transition: all 0.3s linear 0s;
+}
+
+
+.post-module .thumbnailCover img {
+  display: block;
+  width: 100%;
+  margin-left: auto;
+    margin-right: auto;
+  -webkit-transition: all 0.3s linear 0s;
+  -moz-transition: all 0.3s linear 0s;
+  -ms-transition: all 0.3s linear 0s;
+  -o-transition: all 0.3s linear 0s;
+  transition: all 0.3s linear 0s;
+}
+
+
+.post-module .post-content {
+  position: absolute;
+  bottom: 0;
+  background: #ffffff;
+  width: 100%;
+  padding: 30px;
+
+}
+.post-module .post-content .category {
+  position: absolute;
+  top: -15px;
+  right: 0px;
+  border-top:1px;
+  box-shadow: inset 0px 0.5px 0px #bcbcbc;
+  background: rgb(235, 235, 235);
+  padding: 5px 7.5px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+
+
+.post-module .post-content .sub_title {
+  margin: 0;
+  padding: 0 0 20px;
+  color: #727272;
+  font-size: 20px;
+  font-weight: 400;
+}
+.post-module .post-content .description {
+  display: none;
+  color: #666666;
+  font-size: 14px;
+  line-height: 1.8em;
+}
+
+.hover .post-content .description {
+  display: block !important;
+  height: auto !important;
+  opacity: 1 !important;
+}
+
+.post-module .post-content .description2 {
+  color: #666666;
+  font-size: 14px;
+  line-height: 1.8em;
+}
+
+.hover .post-content .description2 {
+  display: block !important;
+  height: auto !important;
+  opacity: 1 !important;
+}
+
+.header-image{
+  height:165px;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+
+}
+
+.img-circle-transparent{
+  opacity: 0.3;
+}
+
+.containerFlip {
+  position: relative;
+  perspective: 800px;
+  height: 480px;
+}
+
+#card {
+  position: absolute;
+  width: 260px;
+  height: 430px;
+  -webkit-transform-style: preserve-3d; /* Chrome, Safari, Opera */
+  transform-style: preserve-3d;
+  transition: transform 1s;
+  border-color: none;
+  border: none;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+#cardCourse {
+  position: absolute;
+  width: 220px;
+  height: 140px;
+  -webkit-transform-style: preserve-3d; /* Chrome, Safari, Opera */
+  transform-style: preserve-3d;
+  transition: transform 1s;
+  border-color: none;
+  border: none;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+
+#card figure {
+  /*margin: 0;*/
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  background-repeat: no-repeat;
+}
+
+/*#card .front {
+  background-color: white;
+}*/
+/*
+#card .front .panel-body{
+  padding-top:165px;
+}*/
+
+#card .back {
+  background: white;
+  transform: rotateY( 180deg );
+  -webkit-transform: rotateY( 180deg );
+}
+
+#card.flipped {
+  transform: rotateY( -180deg );
+  -webkit-transform: rotateY( -180deg );
+}
+
+.noCover{
+  background-color:#D6E3FF;
+}
+
+.title-ellipses {
+  width: 237px;
+  font-size:24px;
+  /*height: 2.4em;*/
+  /*elipsis style*/
+  display: block;
+	display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.title-ellipses:after
+{
+	content    : '   ';
+  color: #337ab7;
+	text-align : right;
+	top     : 210px;
+	right      : 3%;
+	width      : 35%;
+	display    : block;
+	position   : absolute;
+	height     : calc(1.2em * 1.2);
+	background : linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 75%);
+}
+
+.title-ellipses-course {
+  width: 195px;
+  font-size:14px;
+  /*height: 2.4em;*/
+  /*elipsis style*/
+  display: block;
+	display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.title-ellipses-course:after
+{
+	content    : '   ';
+  color: #337ab7;
+	text-align : right;
+	top     : 40px;
+	right      : 3%;
+	width      : 35%;
+	display    : block;
+	position   : absolute;
+	height     : calc(1.2em * 1.2);
+	background : linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 75%);
+}
+
+
+.line-clamp-2
+{
+	-webkit-line-clamp : 2;
+  color: #337ab7;
+	height             : calc(1.2em * 1.2 * 2);
+}
+
+@supports (-webkit-line-clamp: 1)
+{
+	.title-ellipses:after{
+		display : none !important;
+	}
+  .subtitle-ellipses:after{
+    display : none !important;
+  }
+  .ellipsis-tags:after{
+    display : none !important;
+  }
+  .title-ellipses-course:after{
+    display : none !important;
+  }
+}
+
+.subtitle-ellipses {
+  width: 237px;
+  /*height: 1.2em;*/
+  /*elipsis style*/
+  display: block;
+	display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.subtitle-ellipses:after
+{
+	content    : '   ';
+	text-align : right;
+	top     : 280px;
+	right      : 3%;
+	width      : 40%;
+	display    : block;
+	position   : absolute;
+	height     : calc(1.2em * 1.2);
+	background : linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 75%);
+}
+
+.ellipsis-tags {
+  width: 240px;
+  /*height: 2.8em;*/
+  /*elipsis style*/
+  display: block;
+	display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.ellipsis-tags:after
+{
+	content    : '   ';
+	text-align : right;
+	top     : 368px;
+	right      : 0%;
+	width      : 40%;
+	display    : block;
+	position   : absolute;
+	height     : calc(1.2em * 1.2);
+	background : linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 75%);
+}
+
+.placeholder-text, .placeholder-image {
+  color: transparent;
+  background-color: #e1e1e1;
+}
+
+.project-card-loader {
+  z-index: 1040;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.project-card-loading-circle {
+  top:45% !important;
+  left:44% !important;
+}
+
+.input-group-addon-assess{
+  min-width:200px;
+  text-align:left;
+}

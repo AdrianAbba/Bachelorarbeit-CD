@@ -1,0 +1,508 @@
+<template name="addMember">
+  {{#if hasPermissions 'manageMembers,editInfos' currentDoc }}
+    <li class="media">
+      <div class="media-left">
+        <button id="btn-add-member" class="btn btn-primary btn-lg btn-round"><span class="text-center glyphicon glyphicon-plus"></span></button>
+      </div>
+      <div class="media-body">
+        {{#if editActive}}
+          {{#autoForm id="addMember" schema=memberSchema type="method" meteormethod=(getMethodString currentCollection._name "addMember") doc=currentDoc }}
+            <div class="form-group">
+              {{> afFieldInput name="member.userId" type="select2" options=(suggestedUsers exclude=currentDoc.team) placeholder="Neues Mitglied auswählen" allowClear=true}}
+              {{> afFieldInput name="member.role" type="text" placeholder="Aufgaben im Projekt"}}
+              <p>{{> afFieldInput name="member.permissions.editInfos" type="boolean-checkbox"}}</p>
+              <p>{{> afFieldInput name="member.permissions.manageMembers" type="boolean-checkbox"}}</p>
+              <!-- ***************Beginn Coursefeature**************** -->
+              <p>{{> afFieldInput name="member.permissions.manageCourses" type="boolean-checkbox"}}</p>
+              <!-- ***************End Coursefeature**************** -->
+              <p>{{> afFieldInput name="member.permissions.deleteProject" type="boolean-checkbox"}}</p>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+              <button type="reset" class="btn btn-default btn-abort-adding"><span class="glyphicon glyphicon-remove"></span></button>
+            </div>
+          {{/autoForm}}
+        {{/if}}
+      </div>
+    </li>
+  {{/if}}
+</template>
+
+<template name="member">
+  <li class="media">
+    <div class="media-left">
+      <a href="{{pathFor 'userProfile' userId=this.userId uniqueName=(getEmailName this.userId) }}">
+        <img class="media-object img-circle" src="{{getAvatarURL this.userId "avatar50"}}" alt="...">
+      </a>
+    </div>
+    <div class="media-body">
+        {{#if $and editActive (hasPermissions 'editInfos,manageMembers' currentDoc) }}
+          {{#autoForm id="member" type="method-update" singleMethodArgument=true meteormethod=(getMethodString currentCollection._name "updateMember") doc=currentDoc collection=currentCollection setArrayItems=true}}
+            <div class="form-group">
+              <h4 class="media-heading">
+              {{#if $neq this.userId currentUser._id }}
+                {{> afFieldInput name=teamUserIdField type="select2" options=(suggestedUsers exclude=currentDoc.team firstOption=this.userId) placeholder="Neues Mitglied auswählen" value=this.userId }}
+              {{else}}
+                {{user.profile.fullname}}
+              {{/if}}
+              </h4>
+              <p>
+                {{> afFieldInput name=teamUserRoleField type="text" placeholder="Aufgaben im Projekt"}}
+              </p>
+              {{#if $neq this.userId currentUser._id}}
+                <p>{{> afFieldInput name=teamUserCanEditInfosField type="boolean-checkbox"}}</p>
+                <p>{{> afFieldInput name=teamUserCanManageMembersField type="boolean-checkbox"}}</p>
+                <!-- ***************Beginn Coursefeature**************** -->
+                <p>{{> afFieldInput name=teamUserCanManageCoursesField type="boolean-checkbox"}}</p>
+                <!-- ***************End Coursefeature**************** -->
+                <p>{{> afFieldInput name=teamUserCanDeleteProjectField type="boolean-checkbox"}}</p>
+              {{/if}}
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+              <button type="reset" class="btn btn-default btn-abort-editing"><span class="glyphicon glyphicon-remove"></span></button>
+            </div>
+          {{/autoForm}}
+        {{else}}
+          <h4 class="media-heading">
+            <a href="{{pathFor 'userProfile' userId=this.userId uniqueName=(getEmailName this.userId)}}">
+              {{user.profile.fullname}}
+            </a>
+            {{#if hasPermissions 'editInfos,manageMembers' currentDoc }}
+              <a href="#"><span class="glyphicon glyphicon-pencil text-primary btn-edit-member"></span></a>
+            {{/if}}
+            {{#if $and ($neq this.userId currentUser._id) (hasPermissions 'editInfos,manageMembers' currentDoc) }}
+              <a href="#"><span class="glyphicon glyphicon-minus text-danger btn-delete-member"></span></a>
+            {{else}}
+              {{#if showLeaveButton }}
+                <a href="#"><span class="glyphicon glyphicon-minus text-danger show-leave-modal"></span></a>
+              {{/if}}
+            {{/if}}
+          </h4>
+          <p class="text-muted">{{role}}</p>
+        {{/if}}
+    </div>
+  </li>
+</template>
+
+<template name="leaveGroupModal">
+  <div id="leaveGroupModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{groupName}} verlassen</h4>
+        </div>
+        <div class="modal-body">
+          <p>Möchtest du die Gruppe "{{groupName}}" von <strong>{{docTitle}}</strong> wirklich verlassen?</p>
+          {{#if isLastEditor}}
+            <div class="alert alert-danger" role="alert">
+              Du kannst das Projekt nicht verlassen, da du der einzige bist, der alle Bearbeitungsrechte besitzt.
+              <br>
+              <small>Gib einem anderen Mitglied alle Bearbeitungsrechte, füge einen Betreuer hinzu oder lösche das Projekt.</small>
+            </div>
+          {{/if}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button id="leave" type="button" class="btn btn-danger" disabled={{isLastEditor}}>{{groupName}} verlassen</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal Leave Team -->
+</template>
+
+
+<template name="contactItem">
+  <li>
+    {{#if $and editActive (hasPermissions 'editInfos' currentDoc) }}
+      {{#autoForm id="contactItem" type="method-update" singleMethodArgument=true meteormethod=(getMethodString currentCollection._name "updateEditableInfo") doc=currentDoc collection=currentCollection setArrayItems=true}}
+        {{> afFieldInput name=contactMediumField type="select2" options=mediumOptions placeholder="Kontaktmittel auswählen" }}
+        {{> afFieldInput name=contactApproachField type="text" options=mediumOptions placeholder="Details zur Kontaktaufnahme"}}
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+          <button type="reset" class="btn btn-default btn-abort-editing"><span class="glyphicon glyphicon-remove"></span></button>
+        </div>
+      {{/autoForm}}
+    {{else}}
+      {{medium}}: {{approach}}
+      {{#if hasPermissions 'editInfos' currentDoc }}
+        <a href="#"><span class="glyphicon glyphicon-pencil text-primary btn-edit-contact"></span></a>
+        <a href="#"><span class="glyphicon glyphicon-minus text-danger btn-delete-contact"></span></a>
+      {{/if}}
+    {{/if}}
+  </li>
+</template>
+
+<template name="addContact">
+  {{#if hasPermissions 'editInfos' currentDoc }}
+    <li>
+      <button id="btn-add-contact" class="btn btn-primary btn-round"><span class="text-center glyphicon glyphicon-plus"></span></button>
+      {{#if editActive }}
+        {{#autoForm id="addContact" schema=contactSchema type="method" meteormethod=(getMethodString currentCollection._name "addContact") doc=currentDoc}}
+          <div class="form-group">
+            {{> afFieldInput name="contact.medium" type="select2" options=mediumOptions placeholder="Neues Kommunikationsmittel hinzufügen" }}
+            {{> afFieldInput name="contact.approach" type="text" placeholder="Details zur Kontaktaufnahme"}}
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+            <button type="reset" class="btn btn-default btn-abort-adding"><span class="glyphicon glyphicon-remove"></span></button>
+          </div>
+        {{/autoForm}}
+      {{/if}}
+    </li>
+  {{/if}}
+</template>
+
+<template name="editTitle">
+  {{#if $and editActive (hasPermissions 'editInfos' currentDoc) }}
+    {{#autoForm id="editTitle" type="method-update" singleMethodArgument=true meteormethod=(getMethodString currentCollection._name "updateEditableInfo") doc=currentDoc collection=currentCollection }}
+    <div class="form-group">
+      {{> afFieldInput name="title" type="text" placeholder="Titel deines Projekts" }}
+      {{> afFieldInput name="subtitle" type="text" placeholder="Untertitel hinzufügen" }}
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+      <button type="reset" class="btn btn-default btn-abort-editing"><span class="glyphicon glyphicon-remove"></span></button>
+    </div>
+    {{/autoForm}}
+  {{ else }}
+    {{#if currentDoc.title}}
+      {{currentDoc.title}}
+    {{else}}
+      <span class="text-danger"><em>Titel deines Projekts</em></span>
+    {{/if}}
+    {{#if hasPermissions 'editInfos' currentDoc }}
+      <a href="#"><span class="glyphicon glyphicon-pencil text-primary btn-edit-title"></span></a>
+    {{/if}}
+    {{#if currentDoc.subtitle }}
+      <br>
+      <small>{{currentDoc.subtitle}}</small>
+    {{/if}}
+  {{/if}}
+</template>
+
+<template name="editDescription">
+  {{#if $and editActive (hasPermissions 'editInfos' currentDoc) }}
+    {{#autoForm id="editDescription" type="method-update" singleMethodArgument=true meteormethod=(getMethodString currentCollection._name "updateEditableInfo") doc=currentDoc collection=currentCollection }}
+    <div class="form-group">
+      {{> afFieldInput name="description" type="textarea" rows=6 placeholder="Beschreibung deines Projekts" }}
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+      <button type="reset" class="btn btn-default btn-abort-editing"><span class="glyphicon glyphicon-remove"></span></button>
+    </div>
+    {{/autoForm}}
+    {{ else }}
+      {{#if currentDoc.description}}
+        <p>{{currentDoc.description}}</p>
+      {{else}}
+        {{#if (hasPermissions 'editInfos' currentDoc)}}
+          <span class="text-primary"><em>Beschreibung hinzufügen</em></span>
+        {{/if}}
+      {{/if}}
+      {{#if hasPermissions 'editInfos' currentDoc }}
+        <a href="#"><span class="glyphicon glyphicon-pencil text-primary btn-edit-description"></span></a>
+      {{/if}}
+    {{/if}}
+</template>
+
+<template name="notesBoxSupervisors">
+  {{#if supervisorNotes currentDoc}}
+    {{#autoForm id="notesBox" type="method-update" autosave=true singleMethodArgument=true meteormethod=(getMethodString currentCollection._name "updateEditableSupervisorNotes") doc=currentDoc collection=currentCollection }}
+      <div class="form-group">
+        {{> afFieldInput name="notes" type="textarea" rows=6 placeholder="Deine Notizen zum Projekt" }}
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+      </div>
+    {{/autoForm}}
+  {{/if}}
+</template>
+
+<template name="editTags">
+  {{#if $and editActive (hasPermissions 'editInfos' currentDoc) }}
+    {{#autoForm id="editTags" type="method-update" singleMethodArgument=true meteormethod=(getMethodString currentCollection._name "updateEditableInfo") doc=currentDoc collection=currentCollection  }}
+    <div class="form-group">
+      {{> afFieldInput name="tags" type="tags" maxTags=10 maxChars=20 trimValue=true placeholder="Tags eingeben" }}
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+      <button type="reset" class="btn btn-default btn-abort-editing"><span class="glyphicon glyphicon-remove"></span></button>
+    </div>
+    {{/autoForm}}
+    {{ else }}
+      {{#if hasPermissions 'editInfos' currentDoc }}
+        <a href="#"><span class="text-primary btn-edit-tags"><em>Tags hinzufügen</em></span><span class="glyphicon glyphicon-pencil text-primary btn-edit-tags"></span></a>
+      {{/if}}
+      {{#if currentDoc.tags}}
+        <span class="ellipsis-tags line-clamp-2">
+          {{#each tag in currentDoc.tags}}
+            <span class="label label-default" id="tags-color">{{tag}}</span>
+          {{/each}}
+        </span>
+      {{/if}}
+    {{/if}}
+</template>
+
+<template name="jobItem">
+    {{#if $and editActive (hasPermissions 'editInfos' currentDoc) }}
+      {{#autoForm id="jobItem" type="method-update" singleMethodArgument=true meteormethod=(getMethodString currentCollection._name "updateEditableInfo") doc=currentDoc collection=currentCollection setArrayItems=true}}
+        {{> afFieldInput name=jobLabelField type="text" placeholder="Gesuchte Fähigkeit" }}
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+          <button type="reset" class="btn btn-default btn-abort-editing"><span class="glyphicon glyphicon-remove"></span></button>
+        </div>
+      {{/autoForm}}
+    {{else}}
+      <li>
+        {{jobLabel}}
+        {{#if hasPermissions 'editInfos' currentDoc}}
+          <a href="#"><span class="glyphicon glyphicon-pencil text-primary btn-edit-job"></span></a>
+          <a href="#"><span class="glyphicon glyphicon-minus text-danger btn-delete-job"></span></a>
+        {{/if}}
+      </li>
+    {{/if}}
+
+
+</template>
+
+<template name="addJob">
+  {{#if hasPermissions 'editInfos' currentDoc }}
+      <button id="btn-add-job" class="btn btn-primary btn-round"><span class="text-center glyphicon glyphicon-plus"></span></button>
+      {{#if editActive }}
+        {{#autoForm id="addJob" schema=jobSchema type="method" meteormethod=(getMethodString currentCollection._name "addJob") doc=currentDoc}}
+          <div class="form-group">
+            {{> afFieldInput name="job.joblabel" type="text" placeholder="Gesuchte Fähigkeit hinzufügen" }}
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+            <button type="reset" class="btn btn-default btn-abort-adding"><span class="glyphicon glyphicon-remove"></span></button>
+          </div>
+        {{/autoForm}}
+      {{/if}}
+  {{/if}}
+</template>
+
+<!-- ***************Beginn Coursefeature**************** -->
+<template name="addCourse">
+  {{#if $and editActive (hasPermissions 'manageCourses' currentDoc) ($or(isUserInGroup currentDoc.supervisors currentUser._id) (isUserInGroup currentDoc.team currentUser._id)) }}
+    {{#autoForm id="addCourse" schema=addCourseSchema type="method" meteormethod=(getMethodString currentCollection._name "addCourse") doc=currentDoc }}
+    <div class="form-group">
+      {{> afFieldInput name="courseId" type="select2" options=courseList placeholder="Kurs auswählen" allowClear=true}}
+      {{> afFieldInput name="inputKey" type="text" placeholder="Einschreibeschlüssel" }}
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+      <button type="reset" class="btn btn-default btn-abort-course"><span class="glyphicon glyphicon-remove"></span></button>
+    </div>
+    {{/autoForm}}
+  {{ else }}
+    {{#if currentDoc.courseId}}
+      {{courseName currentDoc.courseId}}
+      {{#if $and (hasPermissions 'manageCourses' currentDoc) ($or(isUserInGroup currentDoc.supervisors currentUser._id) (isUserInGroup currentDoc.team currentUser._id)) }}
+        <a href="#"><span class="glyphicon glyphicon-pencil text-primary btn-edit-course"></span></a>
+        <a href="#"><span class="glyphicon glyphicon-minus text-danger btn-delete-course"></span></a>
+      {{/if}}
+    {{else}}
+      {{#if $and (hasPermissions 'manageCourses' currentDoc) ($or(isUserInGroup currentDoc.supervisors currentUser._id) (isUserInGroup currentDoc.team currentUser._id))}}
+        <a href="#"><span class="text-primary btn-edit-course"><em>Kurs Eintragen</em> <span class="glyphicon glyphicon-pencil"></span></span></a>
+      {{/if}}
+    {{/if}}
+  {{/if}}
+</template>
+<!-- ***************End Coursefeature**************** -->
+<template name="editOccasions">
+  {{#if $and editActive (hasPermissions 'editInfos' currentDoc) }}
+    {{#autoForm id="editOccasions" type="method-update" singleMethodArgument=true meteormethod=(getMethodString currentCollection._name "updateEditableInfo") doc=currentDoc collection=currentCollection }}
+      <div class="form-group">
+        {{> afFieldInput name="occasions" type="tags" maxTags=10 maxChars=30 trimValue=true placeholder="Kurs, Projektschein oder sonstige Motivation" }}
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+        <button type="reset" class="btn btn-default btn-abort-editing"><span class="glyphicon glyphicon-remove"></span></button>
+      </div>
+    {{/autoForm}}
+  {{ else }}
+    {{#if currentDoc.occasions}}
+      {{arrayToString currentDoc.occasions}}
+    {{else}}
+      {{#if hasPermissions 'editInfos' currentDoc }}
+        <a href="#"><span class="text-primary btn-edit-occasions"><em>Kurs, Projektschein oder sonstige Motivation</em></span><span class="glyphicon glyphicon-pencil text-primary btn-edit-occasions"></span></a>
+      {{/if}}
+    {{/if}}
+  {{/if}}
+</template>
+
+<template name="supervisor">
+  <li class="media">
+    <div class="media-left">
+      <a href="{{pathFor 'userProfile' userId=this.userId uniqueName=(getEmailName this.userId) }}">
+        <img class="media-object img-circle" src="{{getAvatarURL this.userId "avatar50"}}" alt="Profilbild {{user.profile.fullname}}">
+      </a>
+    </div>
+    <div class="media-body">
+      <h4 class="media-heading">
+        <a href="{{pathFor 'userProfile' userId=this.userId uniqueName=(getEmailName this.userId) }}">{{user.profile.fullname}}</a>
+        {{#if $and ($neq this.userId currentUser._id) (hasPermissions 'manageMembers' currentDoc) }}
+          {{#unless isUserCourseOwner currentDoc this.userId}}
+            <a href="#"><span class="glyphicon glyphicon-minus text-danger btn-delete-supervisor"></span></a>
+          {{/unless}}
+        {{else}}
+          {{#if showLeaveButton }}
+            <a href="#"><span class="glyphicon glyphicon-minus text-danger show-leave-modal"></span></a>
+          {{/if}}
+        {{/if}}
+      </h4>
+      <p class="text-muted">{{role}}</p>
+    </div>
+  </li>
+</template>
+
+<template name="addSupervisor">
+  {{#if hasPermissions 'manageMembers' currentDoc }}
+    <li class="media">
+      <div class="media-left">
+        <button id="btn-add-supervisor" class="btn btn-primary btn-lg btn-round"><span class="text-center glyphicon glyphicon-plus"></span></button>
+      </div>
+      <div class="media-body">
+        {{#if editActive}}
+          {{#autoForm id="addSupervisor" schema=supervisorSchema type="method" meteormethod=(getMethodString currentCollection._name "addSupervisor") doc=currentDoc}}
+            <div class="form-group">
+              {{> afFieldInput name="supervisor.userId" type="select2" options=(suggestedUsers exclude=currentDoc.supervisors role="Mitarbeiter") placeholder="Neuen Betreuer auswählen" allowClear=true}}
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+              <button type="reset" class="btn btn-default btn-abort-adding"><span class="glyphicon glyphicon-remove"></span></button>
+            </div>
+          {{/autoForm}}
+        {{/if}}
+      </div>
+    </li>
+  {{/if}}
+</template>
+
+<template name="editDeadline">
+  {{#if $and editActive (hasPermissions requiredPermissions currentDoc)}}
+    {{#autoForm id="editDeadline" type="method-update" singleMethodArgument=true meteormethod=(getMethodString currentCollection._name "updateEditableInfo") doc=currentDoc collection=currentCollection }}
+      <div class="form-group">
+        {{> afFieldInput name="deadline" type="bootstrap-datepicker" placeholder="Deadline" }}
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+        <button type="reset" class="btn btn-default btn-abort-editing"><span class="glyphicon glyphicon-remove"></span></button>
+      </div>
+    {{/autoForm}}
+  {{ else }}
+    {{#if currentDoc.deadline}}
+      {{readableDate currentDoc.deadline}}
+      {{#if hasPermissions requiredPermissions currentDoc }}
+        <a href="#"><span class="glyphicon glyphicon-pencil text-primary btn-edit-deadline"></span></a>
+      {{/if}}
+    {{else}}
+      {{#if hasPermissions requiredPermissions currentDoc }}
+        <a href="#"><span class="text-primary btn-edit-deadline"><em>Wann muss das Projekt fertig sein?</em></span> <span class="glyphicon glyphicon-pencil btn-edit-deadline"></span></a>
+      {{/if}}
+    {{/if}}
+  {{/if}}
+</template>
+
+<template name="editBeginning">
+  {{#if $and editActive (hasPermissions 'editInfos' currentDoc) }}
+    {{#autoForm id="editBeginning" type="method-update" singleMethodArgument=true meteormethod=(getMethodString currentCollection._name "updateEditableInfo") doc=currentDoc collection=currentCollection }}
+      <div class="form-group">
+        {{> afFieldInput name="beginning" type="bootstrap-datepicker" placeholder="Projekt Beginn" }}
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+        <button type="reset" class="btn btn-default btn-abort-editing"><span class="glyphicon glyphicon-remove"></span></button>
+      </div>
+    {{/autoForm}}
+  {{ else }}
+    {{#if currentDoc.beginning}}
+      {{readableDate currentDoc.beginning}}
+    {{else}}
+      {{#if hasPermissions 'editInfos' currentDoc }}
+        <a href="#"><span class="text-primary btn-edit-beginning"><em>Wann fängt das Projekt an?</em></span> <span class="glyphicon glyphicon-pencil text-primary btn-edit-beginning"></span></a>
+      {{/if}}
+    {{/if}}
+  {{/if}}
+</template>
+
+<template name="editTeamCommunication">
+  {{#if $and editActive (hasPermissions 'editInfos' currentDoc) }}
+    <div class="table table-striped">
+      <div class="table-body">
+        {{#each item in currentDoc.teamCommunication}}
+          {{> editTeamCommItem medium=item.medium url=item.url isPrivate=item.isPrivate currentDoc=currentDoc currentCollection=currentCollection slot=@index}}
+        {{/each}}
+        {{>addTeamCommItem}}
+      </div>
+    </div>
+    <button class="btn btn-primary btn-abort-editing">Speichern</button>
+  {{else}}
+    <ul class="list-inline">
+      {{#each item in currentDoc.teamCommunication }}
+        <li>
+          {{#if $or ($not item.isPrivate) (isTeamMember currentUser._id currentDoc.team) }}
+            <a href="{{item.url}}">{{item.medium}}</a>
+          {{else}}
+            {{item.medium}}
+          {{/if}}
+        </li>
+      {{/each}}
+      {{#if hasPermissions 'editInfos' currentDoc }}
+        <li><a href="#"><span class="glyphicon glyphicon-pencil text-primary btn-edit-teamcomm"></span></a></li>
+      {{/if}}
+    </ul>
+  {{/if}}
+</template>
+
+<template name="editTeamCommItem">
+  {{#autoForm id="editTeamCommItem" class="table-row" type="method-update" singleMethodArgument=true meteormethod=(getMethodString currentCollection._name "updateEditableInfo") doc=currentDoc collection=currentCollection autosave=true setArrayItems=true}}
+    <div class="table-cell">
+      {{> afFieldInput name=teamCommMediumField type="select2" options=mediumOptions placeholder="Kollaborations-Mittel" }}
+    </div>
+    <div class="table-cell">
+      {{> afFieldInput name=teamCommUrlField type="url" placeholder="URL" }}
+    </div>
+    <div class="table-cell">
+      {{> afFieldInput name=teamCommIsPrivateField type="boolean-checkbox" label="schemaLabel"}}
+    </div>
+    <div class="table-cell">
+      <button class="btn btn-danger btn-delete-teamcomm"><span class="glyphicon glyphicon-trash"></span></button>
+    </div>
+  {{/autoForm}}
+</template>
+
+<template name="addTeamCommItem">
+  {{#autoForm id="addTeamCommItem" class="table-row" schema=teamCommSchema type="method" meteormethod=(getMethodString currentCollection._name "addTeamComm") doc=currentDoc}}
+    <div class="table-cell">
+      {{> afFieldInput name="teamComm.medium" type="select2" options=mediumOptions placeholder="Neues Team-Kommunikationsmittel" }}
+    </div>
+    <div class="table-cell">
+      {{> afFieldInput name="teamComm.url" type="text" placeholder="Link"}}
+    </div>
+    <div class="table-cell">
+      {{> afFieldInput name="teamComm.isPrivate" type="boolean-checkbox" label="schemaLabel"}}
+    </div>
+    <div class="table-cell">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+      <button type="reset" class="btn btn-default btn-abort-adding"><span class="glyphicon glyphicon-remove"></span></button>
+    </div>
+  {{/autoForm}}
+</template>
+
+<template name="projectFileUpload">
+  <div class="alert alert-danger" id="uploadAlert" role="alert">Fehler: Deine Datei ist entweder größer als 10MB oder hat nicht die Dateiendung ".pdf".</div>
+  <div class="alert alert-success" id="uploadSuccess" role="alert">Upload war erfolgreich!</div>
+  {{#with currentUpload}}
+    Uploading <b>{{file.name}}</b>:
+    <span id="progress">{{progress.get}}%</span>
+  {{else}}
+    <input id="fileInput" type="file" />
+  {{/with}}
+  <a href="{{file.link}}" download="{{file.name}}" target="_parent">
+    {{file.name}}
+  </a>
+</template>

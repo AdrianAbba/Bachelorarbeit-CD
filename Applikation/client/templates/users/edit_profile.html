@@ -1,0 +1,133 @@
+<template name="editAboutMe">
+  {{#if $and editActive ($eq currentUser._id currentDoc._id) }}
+    {{#autoForm id="editAboutMe" type="method-update" singleMethodArgument=true meteormethod="users.updateEditable" doc=currentDoc collection=currentCollection }}
+    <div class="form-group">
+      {{> afFieldInput name="profile.aboutMe" type="textarea" rows=6 placeholder="Schreibe etwas über dich" }}
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+      <button type="reset" class="btn btn-default btn-abort-editing"><span class="glyphicon glyphicon-remove"></span></button>
+    </div>
+    {{/autoForm}}
+  {{ else }}
+    {{#if currentDoc.profile.aboutMe}}
+      {{currentDoc.profile.aboutMe}}
+    {{else}}
+      {{#if $eq currentUser._id currentDoc._id}}
+        <span class="text-primary"><em>Beschreibung hinzufügen</em></span>
+      {{/if}}
+    {{/if}}
+    {{#if $eq currentUser._id currentDoc._id}}
+      <a href="#"><span class="glyphicon glyphicon-pencil text-primary btn-edit-description"></span></a>
+    {{/if}}
+  {{/if}}
+</template>
+
+<template name="editSkills">
+  {{#if $and editActive ($eq currentUser._id currentDoc._id) }}
+    {{#autoForm id="editSkills" type="method-update" singleMethodArgument=true meteormethod="users.updateEditable" doc=currentDoc collection=currentCollection }}
+    <div class="form-group">
+      {{> afFieldInput name="profile.skills" type="tags" maxTags=20 maxChars=20 trimValue=true placeholder="Tags eingeben" }}
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary btn-abort-editing"><span class="glyphicon glyphicon-ok"></span></button>
+      <button type="reset" class="btn btn-default btn-abort-editing"><span class="glyphicon glyphicon-remove"></span></button>
+    </div>
+    {{/autoForm}}
+    {{ else }}
+      {{#if currentDoc.profile.skills}}
+        {{#each tag in currentDoc.profile.skills}}
+          <span class="label label-default">{{tag}}</span>
+        {{/each}}
+      {{else}}
+        {{#if $eq currentUser._id currentDoc._id}}
+          <span class="text-primary"><em>Tags hinzufügen</em></span>
+        {{/if}}
+      {{/if}}
+      {{#if $eq currentUser._id currentDoc._id}}
+        <a href="#"><span class="glyphicon glyphicon-pencil text-primary btn-edit-tags"></span></a>
+      {{/if}}
+    {{/if}}
+</template>
+
+<template name="addContactUser">
+  {{#if $eq currentUser._id currentDoc._id }}
+    <li>
+      <button id="btn-add-contact" class="btn btn-primary btn-round"><span class="text-center glyphicon glyphicon-plus"></span></button>
+      {{#if editActive }}
+        {{#autoForm id="addContactUser" schema=contactSchema type="method" meteormethod=(getMethodString currentCollection._name "addContact") doc=currentDoc}}
+          <div class="form-group">
+            {{> afFieldInput name="contact.medium" type="select2" options=mediumOptions placeholder="Neues Kommunikationsmittel hinzufügen" }}
+            {{> afFieldInput name="contact.approach" type="text" placeholder="Details zur Kontaktaufnahme"}}
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+            <button type="reset" class="btn btn-default btn-abort-adding"><span class="glyphicon glyphicon-remove"></span></button>
+          </div>
+        {{/autoForm}}
+      {{/if}}
+    </li>
+  {{/if}}
+</template>
+
+<template name="contactItemUser">
+  <li>
+    {{#if $and editActive ($eq currentUser._id currentDoc._id) }}
+      {{#autoForm id="contactItemUser" type="method-update" singleMethodArgument=true meteormethod="users.updateEditable" doc=currentDoc collection=currentCollection setArrayItems=true}}
+        {{> afFieldInput name=contactMediumField type="select2" options=mediumOptions placeholder="Kontaktmittel auswählen" }}
+        {{> afFieldInput name=contactApproachField type="text" options=mediumOptions placeholder="Details zur Kontaktaufnahme"}}
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-abort-editing"><span class="glyphicon glyphicon-ok"></span></button>
+          <button type="reset" class="btn btn-default btn-abort-editing"><span class="glyphicon glyphicon-remove"></span></button>
+        </div>
+      {{/autoForm}}
+    {{else}}
+      {{medium}}: {{approach}}
+      {{#if $eq currentUser._id currentDoc._id}}
+        <a href="#"><span class="glyphicon glyphicon-pencil text-primary btn-edit-contact"></span></a>
+        <a href="#"><span class="glyphicon glyphicon-minus text-danger btn-delete-contact"></span></a>
+      {{/if}}
+    {{/if}}
+  </li>
+</template>
+
+<template name="addLink">
+  {{#if $eq currentUser._id currentDoc._id }}
+    <li>
+      <button id="btn-add-link" class="btn btn-primary btn-round"><span class="text-center glyphicon glyphicon-plus"></span></button>
+      {{#if editActive }}
+        {{#autoForm id="addLink" schema=linkSchema type="method" meteormethod=(getMethodString currentCollection._name "addLink") doc=currentDoc}}
+          <div class="form-group">
+            {{> afFieldInput name="link.medium" type="select2" options=mediumOptions placeholder="Neues Kommunikationsmittel hinzufügen" }}
+            {{> afFieldInput name="link.approach" type="text" placeholder="Details zur Kontaktaufnahme"}}
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
+            <button type="reset" class="btn btn-default btn-abort-adding"><span class="glyphicon glyphicon-remove"></span></button>
+          </div>
+        {{/autoForm}}
+      {{/if}}
+    </li>
+  {{/if}}
+</template>
+
+<template name="linkItem">
+  <li>
+    {{#if $and editActive ($eq currentUser._id currentDoc._id) }}
+      {{#autoForm id="linkItem" type="method-update" singleMethodArgument=true meteormethod="users.updateEditable" doc=currentDoc collection=currentCollection setArrayItems=true}}
+        {{> afFieldInput name=linkMediumField type="select2" options=mediumOptions placeholder="Kontaktmittel auswählen" }}
+        {{> afFieldInput name=linkApproachField type="text" options=mediumOptions placeholder="Details zur Kontaktaufnahme"}}
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-abort-editing"><span class="glyphicon glyphicon-ok"></span></button>
+          <button type="reset" class="btn btn-default btn-abort-editing"><span class="glyphicon glyphicon-remove"></span></button>
+        </div>
+      {{/autoForm}}
+    {{else}}
+      {{medium}}: {{approach}}
+      {{#if $eq currentUser._id currentDoc._id}}
+        <a href="#"><span class="glyphicon glyphicon-pencil text-primary btn-edit-contact"></span></a>
+        <a href="#"><span class="glyphicon glyphicon-minus text-danger btn-delete-link"></span></a>
+      {{/if}}
+    {{/if}}
+  </li>
+</template>

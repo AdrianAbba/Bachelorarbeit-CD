@@ -1,0 +1,103 @@
+<!-- Dieses HTML-Template rendert die Mitgliederliste.
+{{ .... }} sind Spacebars (Erklärung in der Bacheloarbeit im Kapitel "Meteor"). Alle Funktionen/Helpers die in dieser Datei aufgerufen werden, werden in der course_list.js ausgeführt,
+sollte diese Funktion nicht gefunden werden, steht diese in den Global-Helpers. -->
+<template name="courseList">
+  {{#onlyIfLoggedIn}} <!-- Spacebar zum Ausführen der integrierten Meteor Funktion zum checken, ob ein Nutzer eingelogt ist, damit der den Inhalt dieses Templates sehen darf-->
+    {{#if canShow}}
+    <ol class="breadcrumb">
+      <li><a href="{{pathFor 'landingPage'}}">Startseite</a></li>
+      <li><a href="{{pathFor 'courses' _id=currentUser._id}}">Meine Kurse</a></li>
+      <li><a href="{{pathFor 'course' courseId=courseId courseName=(encodeUrlString courseName)}}">{{courseName}} {{courseSemester}}</a></li>
+      <li class="active">Mitglieder</li>
+    </ol>
+      {{#if checkUser}}
+        <div class="form-group pull-right">
+          <button id="excel-button" type="button" disabled={{isCourseProject}} class="btn btn-primary"><span class="glyphicon glyphicon-export"></span> Teilnehmer Export</button>
+          <button id="helios-button" type="button" disabled={{isCourseProject}} class="btn btn-primary"><span class="glyphicon glyphicon-export"></span> Heliosliste Export</button>
+          <button id="btn-assess-save" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-saved"></span> Speichern</button>
+        </div>
+      {{/if}}
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Profil</th>
+            <th>Vorname</th>
+            <th>Nachname</th>
+            {{#if checkUser}}
+              <th>Matr.-Nr.</th>
+            {{/if}}
+            <th>Studiengang</th>
+            <th>Projekte</th>
+            {{#if checkUser}}
+              <th>Bewertung</th>
+            {{/if}}
+            <th>Rolle</th>
+            <!-- <th>Projektsuchend</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          {{#each userItems}}
+            {{> UI.dynamic template=this data=@index}}
+          {{/each}}
+        </tbody>
+      </table>
+      {{#if checkUser}}
+        <div class="createLink">
+          {{#if createLink}}
+            {{> file}}
+          {{/if}}
+        </div>
+      {{/if}}
+    {{else}}
+      <h2>Du bist kein Mitglied dieses Kurses!</h2>
+    {{/if}}
+  {{/onlyIfLoggedIn}}
+</template>
+
+<template name="loadCourseUser">
+  {{#if Template.subscriptionsReady}}
+    {{#each user in documents}}
+      {{> userCourseListItem userId=user._id }}
+    {{/each}}
+  {{else}}
+    {{>userCourseListLoading}}
+  {{/if}}
+</template>
+
+<template name="userCourseListLoading">
+  <div class="loader">
+    <a href="#" class="load-more--loading"></a>
+  </div>
+</template>
+
+<template name="userCourseListItem">
+  {{#with user}}
+    <tr>
+      <td>
+        <a href="{{pathFor 'userProfile' userId=this._id uniqueName=(getEmailName this._id) }}"><img src={{avatarURL}}></a>
+      </td>
+      <td>{{profile.firstname}}</td>
+      <td>{{profile.lastname}}</td>
+      {{#if checkUser}}
+        <td>{{profile.matricNo}}</td>
+      {{/if}}
+      <td>{{studyCourseName profile.studyCourseId profile.departmentId profile.facultyId}}</td>
+      <td>
+        {{#each project in userCourseProjects}}
+          <span class="label label-default">{{project.title}}</span>
+        {{/each}}
+      </td>
+      {{#if checkUser}}
+        <td>
+          {{#if $eq profile.role "Student"}}
+            <div class="input-group">
+              <input type="text" class="form-control" id="{{inputId _id}}" placeholder="Bewertung" aria-describedby="basic-addon1" value="{{gradingValue _id}}">
+            </div>
+          {{/if}}
+        </td>
+      {{/if}}
+      <td>{{profile.role}}</td>
+      <!-- <td>&lt;ja/nein&gt;</td> -->
+    </tr>
+  {{/with}}
+</template>
