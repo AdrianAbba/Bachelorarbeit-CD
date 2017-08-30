@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="ad.size" content="width=800,height=250">
+  <title>Siemens - BioNTech</title>
+  <link rel="stylesheet" href="index_data/style.css">
+  <script type="text/javascript" src="index_data/Animation012-min.js"></script>
+  <script type="text/javascript" src="index_data/AnimationManager012-min.js"></script>
+  <script src="index_data/Enabler_01_160.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <div id="container" width="800" height="250">
+    <div id="content">
+      <div id="bg-div1">
+        <canvas id="Img1" width="800" height="250"></canvas>                
+        <canvas id="Img2" width="800" height="250"></canvas>        
+      </div>     
+      <canvas id="canvasPetrolBox" width="800" height="250"></canvas>
+      <canvas id="copy1" width="800" height="250"></canvas>
+      <canvas id="ctaBox" width="800" height="250"></canvas>
+      <canvas id="ctaCopy" width="800" height="250"></canvas>
+      <canvas id="ctaArrow" width="800" height="250"></canvas>
+      <canvas id="iflLogo" width="800" height="250"></canvas>
+      <div id="overlay">
+       <canvas id="iflLogoOverlay" width="800" height="250"></canvas>
+     </div>
+   </div>
+ </div>
+ <button id="background_exit_dc"></button>
+ <script type="text/javascript">
+   var bgExit;
+   bgExit = document.getElementById('background_exit_dc');
+   bgExit.onclick = function(e) {Enabler.exit('clickEvent');}
+ </script>
+ <script type="text/javascript" src="index_data/script.js"></script>
+
+
+</body></html>

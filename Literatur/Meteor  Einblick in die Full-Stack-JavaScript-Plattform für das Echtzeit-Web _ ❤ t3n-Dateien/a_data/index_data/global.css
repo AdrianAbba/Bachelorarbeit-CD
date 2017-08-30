@@ -1,0 +1,160 @@
+body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+.bg {
+    background: url(img/bg.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center top;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.overlay {
+    bottom: 8px;
+    background-color: rgba(255, 255, 255, 0.85);
+    height: 225px;
+    position: absolute;
+    padding: 0 4vw;
+    color: #006c8c;
+    width: calc(100% - 8vw);
+}
+
+#push1 {
+    width: calc(100% - 8vw);
+    height: calc(100% - 35px);
+    margin-top: 35px;
+    display: inline;
+    position: absolute;
+    animation: appear 10s ease-in-out;
+    background-image: url(img/push1.png);
+    background-repeat: no-repeat;
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+    5% {
+        opacity: 1;
+    }
+    45% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    120% {
+        opacity: 0;
+    }
+}
+
+#push2 {
+    width: calc(100% - 8vw);
+    height: calc(100% - 35px);
+    margin-top: 35px;
+    display: inline;
+    position: absolute;
+    animation: appear2 10s ease-in-out;
+    background-image: url(img/push2.png);
+    background-repeat: no-repeat;
+}
+
+@keyframes appear2 {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    55% {
+        opacity: 1;
+    }
+}
+
+.footer {
+    position: absolute;
+    bottom: 8px;
+    width: calc(100% - 8vw);
+}
+
+.cta {
+    background: linear-gradient(0deg, #fe8028 0%, #fea448 100%);
+    width: 135px;
+    height: 35px;
+    border-radius: 2px;
+    margin-right: 16px;
+    color: white;
+    float: left;
+    border: 1px solid #fe8028;
+    animation: shake 4s ease-in-out;
+    animation-iteration-count: 5;
+}
+
+.cta:hover {
+    background: linear-gradient(0deg, #fea448 0%, #fe8028 100%);
+}
+
+.button {
+    font-size: 13px;
+    text-align: center;
+    top: 3px;
+    line-height: 18px;
+    letter-spacing: 0.6px;
+    text-shadow: 0.5px 0.866px 0px rgba(0, 0, 0, 0.3);
+    font-family: "metaOT", Helvetica, Arial, Sans-Serif;
+    font-weight: 600;
+    margin: 8px 0 28px 0;
+}
+
+@keyframes shake {
+    0% {
+        transform: scale(1, 1);
+    }
+    85% {
+        transform: scale(1, 1);
+    }
+    90% {
+        transform: scale(1.1, 1.1);
+    }
+    95% {
+        transform: scale(1, 1);
+    }
+}
+
+.logo {
+    float: right;
+}
+
+.signet {
+    position: absolute;
+    bottom: 189px;
+    right: 4vw;
+    animation: erscheinen 2s ease-in-out;
+}
+
+.signet img {
+    max-width: 108px;
+}
+
+@keyframes erscheinen {
+    0% {
+        opacity: 0;
+    }
+    90% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

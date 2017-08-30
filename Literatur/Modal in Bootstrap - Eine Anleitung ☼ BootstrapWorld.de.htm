@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Modal in Bootstrap - Eine Anleitung ☼ BootstrapWorld.de</title>
+<meta name="description" content="In dieser Anleitung möchte ich dir zeigen, wie du in Bootstrap ein Dialogfenster (sogenanntes Modal) erstellen kannst.">
+<meta name="keywords" content="">
+<meta name="robots" content="index,follow">
+                        <meta property="og:title" content="Modal in Bootstrap - Eine Anleitung">
+        <meta property="og:type" content="article">
+        <meta property="og:url" content="https://www.bootstrapworld.de/modal-tutorial.html">        
+        <meta property="og:description" content="In dieser Anleitung möchte ich dir zeigen, wie du in Bootstrap ein Dialogfenster (sogenanntes Modal) erstellen kannst.">        
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/png" href="https://www.bootstrapworld.de/design/bootstrapworld/favicon.ico">
+
+        <!-- Bootstrap core CSS -->
+        <link href="Modal%20in%20Bootstrap%20-%20Eine%20Anleitung%20%E2%98%BC%20BootstrapWorld.de-Dateien/bootstrap.css" rel="stylesheet">
+
+        
+        <!-- Custom styles for this template -->
+        <link href="Modal%20in%20Bootstrap%20-%20Eine%20Anleitung%20%E2%98%BC%20BootstrapWorld.de-Dateien/style.css" rel="stylesheet">
+        <link href="Modal%20in%20Bootstrap%20-%20Eine%20Anleitung%20%E2%98%BC%20BootstrapWorld.de-Dateien/font-awesome.css" rel="stylesheet">
+        <link href="Modal%20in%20Bootstrap%20-%20Eine%20Anleitung%20%E2%98%BC%20BootstrapWorld.de-Dateien/socialteil.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    
+</head>
+
+    <body>
+
+        <nav class="navbar">
+            <div class="container">
+                <div class="col-md-12">
+                    <div class="navbar-header">
+                        <div class="page-header"><a href="http://www.bootstrapworld.de/">BootstrapWorld.de <i class="fa fa-rocket" aria-hidden="true"></i></a><br><small class="hidden-xs">Bootstrap Themes, Anleitungen, Downloads</small></div>
+                    </div>
+                    <a href="#" class="nav-link btn btn-primary btn-large hidden">Menü</a>
+                    <div id="navbar">
+                        <ul class="nav nav-pills pull-right">
+<li><a href="https://www.bootstrapworld.de/">Start</a></li>
+<li><a href="https://www.bootstrapworld.de/tutorial.html">Anleitung</a></li>
+<li><a href="https://www.bootstrapworld.de/e-book.html">E-Book</a></li>
+<li><a href="https://www.bootstrapworld.de/themes.html">Themes</a></li>
+<li><a href="https://www.bootstrapworld.de/tools.html">Tools</a></li>
+<li><a href="https://www.bootstrapworld.de/ressourcen.html">Ressourcen</a></li>
+</ul>
+                    </div><!--/.navbar-collapse -->
+                </div>
+            </div>
+        </nav>
+
+
+        <div class="title-header">
+            <div class="container">
+                <h1>                    Modal in Bootstrap - Eine Anleitung
+                                    </h1>
+            </div>	
+        </div>
+
+        <div class="container">
+
+                        <div class="row">
+                <div class="col-md-12">
+                    <ol class="breadcrumb">
+                                                <li><a href="https://www.bootstrapworld.de/">Startseite</a></li>
+                                                <li><a href="https://www.bootstrapworld.de/tutorial.html">Anleitung</a></li>
+                                                <li>Modals</li>
+                                            </ol>
+                </div>
+            </div>
+            
+            <div class="row">
+    <div class="col-md-12 the_content">
+        <p>In dieser Anleitung möchte ich dir zeigen, wie du in 
+Bootstrap ein Modal (auf deutsch Dialogfenster) in deine Webseite 
+einbindest, anpasst und Inhalt dynamisch per Ajax nachlädst.</p>
+<p>Keine Lust zum Lesen, dann springe direkt zum Abschnitt, der dich interessiert:</p>
+<p><a href="#modal">Was ist ein Modal?</a><br><a href="#use">Modal verwenden</a><br><a href="#size">Größe / Animation</a><br><a href="#ajax">Content per Ajax laden</a><br><a href="#tips">Tipps zum Umgang mit Modals</a></p>
+<h2 id="modal">Was ist ein Modal?</h2>
+<p>Ein Modal ist nichts anderes als ein div-Element, dass sich über 
+deine Seite legt. Dabei erscheint ein grauer Hintergrund und Links auf 
+der eigentlichen Seite sind nicht mehr anklickbar.</p>
+<p>So sieht ein Modal in Bootstrap übrigens aus.</p>
+<p><img src="Modal%20in%20Bootstrap%20-%20Eine%20Anleitung%20%E2%98%BC%20BootstrapWorld.de-Dateien/bootstrap-modal-mit-data-attributen-laden-19.png" alt="&lt;br&gt;Bootstrap Modal mit Data-Attributen laden" border="0" align="middle"></p>
+<p>&nbsp;</p>
+<h2 id="use">Modals einbinden - So funktioniert's</h2>
+<p>Wie bei Bootstrap bekannt, kann ein Modal entweder durch <strong>data-Attribute</strong> aufgerufen werden oder <strong>per Javascript</strong> geladen werden. Für beide Vorgehensweisen habe ich Beispiele erstellt.</p>
+<h3>Modal mit data-Attributen laden</h3>
+<p>Mit der Klasse <strong>data-toggle="modal"</strong> legst du fest, dass ein klickbares Element (z. B. Link oder Button) ein Modal/ Dialogfenster öffnet.<br>Die Klasse <code>data-modal="#modal1"</code> verweist auf das Modal selbst, wobei #modal1 die ID des Modals ist.<br>Es genügen zwei CSS-Klassen, um ein Modal mittels data-Attributen aufzurufen.</p>
+<p><span style="text-decoration: underline;">Beispiele</span>: <a href="https://www.bootstrapworld.de/modal-data-attribute.html" target="_blank">Modal mit data-Attributen laden</a></p>
+<h3>Modal mit JavaScript laden</h3>
+<p>Die zweite mächtigere Methode ein Modal anzuzeigen bietet JavaScript.
+ Hierbei werden verschiedenen Optionen übergeben sowie die Steuerung, 
+wann das Modal angezeigt werden soll (z. B: nach einer Aktion).</p>
+<pre><code class="language-js" data-lang="js"><span class="nx">$('#myModal').modal({<br>  keyboard: true, //ESC-Taste schließt Modal<br>  backdrop: true, //beim Klick außerhalb des Modals, wird dieses geschlossen (sonst "static")<br>  show: true, //Modal wird nach dem Initialisieren angezeigt<br>});</span></code></pre>
+<p>Mit JavaScript ist es möglich auf Methodenaufrufe mit folgenden Modal-Events zu reagieren.</p>
+<table class="table table-striped">
+<tbody>
+<tr>
+<th>Methode</th>
+<th>Event</th>
+<th>Bemerkung</th>
+</tr>
+<tr>
+<td>modal('show')</td>
+<td>show.bs.modal</td>
+<td>Event wird sofort nach dem Aufruf der show()-Methode aufgerufen.<br>Der auslösende Klick kann durch relatedTarget identifiziert werden.</td>
+</tr>
+<tr>
+<td>modal('show')</td>
+<td>shown.bs.modal</td>
+<td>Event feuert nachdem Modal sichtbar ist (+ alle CSS-Animationen beendet wurden)<br>Der auslösende Klick kann durch relatedTarget identifiziert werden.</td>
+</tr>
+<tr>
+<td>modal('hide')</td>
+<td>hide.bs.modal</td>
+<td>Event wird sofort nach dem Aufruf der hide()-Methode aufgerufen.</td>
+</tr>
+<tr>
+<td>modal('hide')</td>
+<td>hidden.bs.modal</td>
+<td>Event feuert nachdem Modal ausgeblendet (+ alle CSS-Animationen beendet wurden)</td>
+</tr>
+</tbody>
+</table>
+<p>Anstelle von show/hide kann man auch modal('toggle') verwenden,<br>um das Modal bei jedem Klick abwechselnd ein- oder auszublenden.</p>
+<p>Und so kann man eine Modal-Methode in JS aufrufen.</p>
+<pre><code class="language-js" data-lang="js">var myModal = $('#myModal').modal({show:false}); //Modal erzeugen, aber nicht gleich einblenden<br>$('a.btn').click(function(e) { //bei Klick auf &lt;a class="btn"... wird #myModal angezeigt<br>  myModal.modal('show');<br>});</code></pre>
+<p>So sieht das Abfangen eines Events in JS aus:</p>
+<pre><code class="language-js" data-lang="js">$('#myModal').on('shown.bs.modal', function (e) {<br>&nbsp; console.log("Das Modal wurde eingeblendet");<br>});</code></pre>
+<p><span style="text-decoration: underline;">Beispiele</span>: <a href="https://www.bootstrapworld.de/modal-javascript.html" target="_blank">Modal mit Javascript laden</a></p>
+<h2 id="size">Modal Größe / Animation</h2>
+<p>Modals können in drei verschiedenen Größen angezeigt werden</p>
+<pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"modal-dialog <strong>modal-lg</strong>"</span><span class="nt">&gt;<br></span></code></pre>
+<p><span class="nt">zeigt ein breites Dialogfenster an, wohingegen<br></span></p>
+<pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"modal-dialog modal-sm"</span><span class="nt">&gt;</span></code></pre>
+<p><span class="nt">ein schmales Modal anzeigt. Lässt man beide Klassen weg wird das Modal in der Standard-Größe gezeigt. <br></span></p>
+<p><span style="text-decoration: underline;">Beispiele</span>: <a href="https://www.bootstrapworld.de/modal-data-attribute.html" target="_blank">verschiedene Modal-Größen<br></a></p>
+<p><span class="nt">Um ein Modal ohne Eingangsanimation ("Herunterschieben") zu starten, muss man einfach die fade-Klasse weglassen.<br></span></p>
+<pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"modal"</span> <span class="na">tabindex=</span><span class="s">"-1"</span> <span class="na">role=</span><span class="s">"dialog"</span> <span class="na">aria-labelledby=</span><span class="s">"..."</span><span class="nt">&gt;<br></span></code></pre>
+<p><span class="nt">im Vergleich dazu das Standardverhalten mit Animation<br></span></p>
+<pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"modal <strong>fade</strong>"</span> <span class="na">tabindex=</span><span class="s">"-1"</span> <span class="na">role=</span><span class="s">"dialog"</span> <span class="na">aria-labelledby=</span><span class="s">"..."</span><span class="nt">&gt;<br></span></code></pre>
+<p><span style="text-decoration: underline;">Beispiele</span>: <a href="https://www.bootstrapworld.de/modal-data-attribute.html" target="_blank">Modal mit und ohne Animation</a><a href="https://www.bootstrapworld.de/modal-data-attribute.html" target="_blank"><br></a></p>
+<h2 id="ajax">Modal Content per Ajax laden</h2>
+<p>Ein wichtiger Aspekt bei der Verwendung von Modals ist das dynamische
+ Nachladen von Seiteninhalt, bevor das Modal angezeigt wird.<br>Hierbei 
+wird ein Ajax-Request ausgeführt, der den Content entweder als Text oder
+ JSON-Objekt entgegen nimmt und in den modal-body einfügt.</p>
+<p>Das Ganze funktioniert so perferkt, dass man ausgehend vom angeklickten Button unterschiedlichen Ajax-Content laden kann.<br>Klingt kompliziert, ist aber eigentlicht ganz einfach.</p>
+<pre><code>$(function() {<br><br>&nbsp; //Bevor das Modal angezeigt wird, holen wir den Content via Ajax-Request<br>&nbsp; $('#modal').on('show.bs.modal', function (event) {<br>&nbsp;&nbsp;&nbsp; var button_clicked = $(event.relatedTarget) // welcher Button wurde geklickt?<br>&nbsp;&nbsp;&nbsp; var format = button_clicked.data('format') // Hole das aktuelle Format über ein weiteres data-Attribut (data-format)<br><br>&nbsp;&nbsp;&nbsp; //führe den Ajax-Request durch und passen den modal-body an<br>&nbsp;&nbsp;&nbsp; if(format=="json") {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $.get('ajax-beispiel.php?format=' + format,function(json) {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $('#modal').find('.modal-body').html(json.message)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; },'json');<br>&nbsp;&nbsp;&nbsp; } else {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $.get('ajax-beispiel.php?format=' + format,function(text) {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $('#modal').find('.modal-body').html(text)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });<br>&nbsp;&nbsp;&nbsp; }&nbsp;&nbsp;&nbsp; &nbsp;<br><br>&nbsp;&nbsp;&nbsp; //und passen zum Schluß noch die Modal-Überschrift an<br>&nbsp;&nbsp;&nbsp; $('#modal').find('.modal-title').text('Modal mit dynamisch Inhalt ('+format+')');&nbsp;&nbsp; <br>&nbsp; });<br><br>});</code></pre>
+<p><span style="text-decoration: underline;">Beispiele</span>: <a href="https://www.bootstrapworld.de/modal-ajax-content.html" target="_blank">Modal Content mit Ajax laden</a></p>
+<h2 id="tips">Was du noch wissen musst</h2>
+<p>Folgende 3 Dinge solltest du beachten, wenn du mit Modals arbeitest:</p>
+<ul>
+<li><strong>Mehrere geöffnete Modals</strong> werden in Bootstrap <strong>nicht</strong> unterstützt</li>
+<li><strong>Modal</strong>-HTML-Code am besten direkt <strong>oberhalb</strong> des schließenden <strong>&lt;/body&gt;</strong> Elementes platzieren</li>
+<li><strong>Modals</strong> und <strong>Smartphones</strong> <strong>vertragen sich nicht gut</strong>, versuche am besten dort ganz auf Modals zu verzichten ;-)</li>
+</ul>
+
+                    </div>   
+</div>
+
+                        <nav aria-label="Vorherige / naechste Seite anzeigen">
+                <ul class="pager">
+                    <li class="previous"><a href="https://www.bootstrapworld.de/navbar-tutorial.html"><span aria-hidden="true">←</span> vorherige Seite</a></li>                                    </ul>
+            </nav>
+            
+            <div class="row">
+                <div class="col-md-12">         
+                    <div class=" btw-social-box">
+
+                        <div class="socialteil-box">
+                            <ul>
+                                <li class="facebook" data-href="http://www.facebook.com/sharer.php?u=https://www.bootstrapworld.de/modal-tutorial.html"><span class="share-text">In Facebook teilen</span><i class="i-facebook"></i></li>
+                                <li class="twitter" data-href="https://twitter.com/share?url=https://www.bootstrapworld.de/modal-tutorial.html"><i class="i-twitter"></i><span class="share-text">In Twitter teilen</span></li>
+                                <li class="googleplus" data-href="https://plus.google.com/share?url=https://www.bootstrapworld.de/modal-tutorial.html"><i class="i-gplus"></i><span class="share-text">In G+ teilen</span></li>
+                                <li class="whatsapp" data-href="whatsapp://send?text=Modal+in+Bootstrap+-+Eine+Anleitung+https%3A%2F%2Fwww.bootstrapworld.de%2Fmodal-tutorial.html"><i class="i-whatsapp"></i><span class="share-text">In Whatsapp teilen</span></li>
+                            </ul>
+                        </div>
+
+                        <div class="shariff" data-services="[&quot;facebook&quot;,&quot;twitter&quot;,&quot;googleplus&quot;]" data-lang="de" data-title=""></div>
+
+                                            </div>
+                </div>
+            </div>
+
+                        <div class="panel panel-info" id="questions-box">
+
+    
+    </div>
+            
+        </div> <!-- /container -->
+
+
+        <div class="container">
+            <a href="#" class="back-to-top">Nach oben</a>
+            <footer>
+                <br>
+                <small>© 2017 <a href="https://www.bootstrapworld.de/d.php">Datenschutzerklärung</a> | <a href="https://www.bootstrapworld.de/impressum.html">Impressum</a> <span class="pull-right">Mit <i class="fa fa-heart" aria-hidden="true"></i> gemacht in Sachsen.</span> </small>
+            </footer>
+        </div>
+
+                <button type="button" id="help-box-button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#help-box-modal">
+            Hast du eine Frage zu Bootstrap?<br>Wie kann ich dir helfen?
+        </button>
+
+                <div class="modal" id="help-box-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                                        <div class="panel panel-info" id="questions-box">
+                        <div class="panel-heading">
+                            Wie kann ich Dir helfen?
+                        </div>
+                        <div class="panel-body">
+                            <form method="post" action="https://www.bootstrapworld.de/files/question.php" id="comments-form">
+                                <div class="form-group">
+                                    <label for="label_name">Dein Name:</label>
+                                    <input class="form-control comments-error" id="label_name" name="name" type="name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="label_question">
+                                        Deine Frage:
+                                    </label>
+                                    <textarea class="form-control comments-error" name="question" id="label_question" rows="3"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="label_email">Deine E-Mail: <small>(für Rückfragen / Antwort)</small></label>
+                                    <input class="form-control comments-error" id="label_email" name="email" type="email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="label_captcha">
+                                        Spamschutz: <small>(bitte Aufgabe lösen)</small><br>
+                                        <img src="Modal%20in%20Bootstrap%20-%20Eine%20Anleitung%20%E2%98%BC%20BootstrapWorld.de-Dateien/captcha.png">
+                                    </label>
+                                    <input class="form-control captcha-error" id="label_captcha" name="captcha" type="captcha">
+                                </div>
+                                <div class="form-group">
+                                    <div class="">
+                                        <label>
+                                            <input name="optin" value="1" type="checkbox"> Ja, informiere mich über neue Tutorials und Scripte. 
+                                        </label>
+                                    </div>
+                                </div>                                    
+                                <div class="form-group x1">
+                                    <label for="label_url">Webseite (bitte das nachfolgende Feld unbedingt frei lassen, wird gegen Spam-Bots verwendet)</label>
+                                    <input class="form-control" name="url" type="text">
+                                </div>
+                                <p id="comments-message" style="display:none">45</p>
+                                <input name="pageid" value="45" type="hidden">
+                                <input name="captchaid" value="1" type="hidden">
+                                <button type="submit" id="button" class="btn btn-primary btn-lg">Frage abschicken</button>
+                            </form>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/javascript" async="" defer="defer" src="Modal%20in%20Bootstrap%20-%20Eine%20Anleitung%20%E2%98%BC%20BootstrapWorld.de-Dateien/piwik.js"></script><script src="Modal%20in%20Bootstrap%20-%20Eine%20Anleitung%20%E2%98%BC%20BootstrapWorld.de-Dateien/jquery-1.js"></script>
+        <script src="Modal%20in%20Bootstrap%20-%20Eine%20Anleitung%20%E2%98%BC%20BootstrapWorld.de-Dateien/bootstrap.js"></script>
+        <script src="Modal%20in%20Bootstrap%20-%20Eine%20Anleitung%20%E2%98%BC%20BootstrapWorld.de-Dateien/socialteil.js" async=""></script>
+        <script src="Modal%20in%20Bootstrap%20-%20Eine%20Anleitung%20%E2%98%BC%20BootstrapWorld.de-Dateien/app.js"></script>
+
+        
+        
+        <script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//tracker.anwesoft.com/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '3']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+
+    
+</body></html>
